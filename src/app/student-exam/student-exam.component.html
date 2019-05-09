@@ -1,0 +1,38 @@
+<div class="ui segment">
+  <div class="ui grid" *ngFor="let question of questions">
+    <div class="four wide column">
+      <div class="ui card" style="width:100%">
+        <div class="content">
+          <div class="header">{{question.name}}</div>
+        </div>
+
+        <div class="content">
+          <p>Difficulty: {{question.difficulty}}</p>
+          <p>Description: {{question.description}}</p>
+        </div>
+
+        <div class="extra content">
+          <button class="ui button blue" (click)="question.isEditorOpen = !question.isEditorOpen">Toggle Text
+            Editor</button>
+          <button class="ui button blue">View Test Cases</button>
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <div class="twelve wide column" *ngIf="!!question.isEditorOpen">
+      <ngx-codemirror [(ngModel)]="question.code" [options]="{
+    lineNumbers: true,
+    theme: 'material',
+    mode: 'javascript',
+    matchBrackets: true,
+    lineNumbers: true,
+    direction:'ltr'
+  }"></ngx-codemirror>
+      <button class="ui blue button" (click)="save(question)">SAVE</button>
+      <button class="ui green button" style="float:right">SUBMIT</button>
+    </div>
+  </div>
+</div>

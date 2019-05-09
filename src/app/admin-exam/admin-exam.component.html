@@ -1,0 +1,252 @@
+<app-admin-menu></app-admin-menu>
+<div style="margin-top:5%">
+  <div class="ui segment">
+    <button class="ui button blue" (click)="isAddingStudent = true;">
+      Add Student
+    </button>
+
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>School</th>
+          <th>Course</th>
+          <th>Year</th>
+          <th colspan="2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of students">
+          <td>{{student.name}}</td>
+          <td>{{student.school}}</td>
+          <td>{{student.course}}</td>
+          <td>{{student.year}}</td>
+          <td><button class="ui button red" (click)="deleteStudent(student.std_id);">Delete</button></td>
+          <td><button class="ui button violet" (click)="showUpdateModal(student)">Update</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ui segment">
+    <button class="ui button blue" (click)="isQtsModalAdding = true;">Add Question</button>
+    <table class="ui celled table center aligned">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Difficulty</th>
+          <th>Code Path</th>
+          <th colspan="3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let qts of questions; let i = index;">
+          <td>{{qts.name}}</td>
+          <td>{{qts.description}}</td>
+          <td>{{qts.difficulty}}</td>
+          <td>{{qts.code_path}}</td>
+          <td><button class="ui button blue" (click)="viewTestCases(qts, i)">View Test Cases</button></td>
+          <td><button class="ui button red">Delete Question</button></td>
+          <td><button class="ui button violet">Update Question</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+</div>
+
+
+
+<sui-modal [isClosable]="false" (dismissed)="isAddingTestCases = false" #addTestCaseModal *ngIf="isAddingTestCases">
+  <div class="header">Create Test Case</div>
+  <div class="content">
+    <form class="ui form" #f="ngForm" (ngSubmit)="createTestCase(f);">
+      <div class="field">
+        <label>Input</label>
+        <textarea name="inputs" ngModel rows="2"
+          placeholder="Note: Use \n to separate each inputs E.g: 12\n14\n20"></textarea>
+      </div>
+      <div class="field">
+        <div class="two fields">
+          <div class="field">
+            <sui-checkbox name="isHidden" ngModel>
+              Is test case hidden?
+            </sui-checkbox>
+          </div>
+          <div class="field">
+            <label>Points</label>
+            <input type="number" name="points" ngModel>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="ui button blue" (click)="addTestCaseModal.dismiss()">Cancel</button>
+      <button type="submit" class="ui button green" style="float:right">Submit</button>
+    </form>
+  </div>
+
+</sui-modal>
+
+
+<sui-modal [isClosable]="false" (dismissed)="isViewingTestCases = false;" #viewTestCases *ngIf="isViewingTestCases">
+  <div class="header">
+    Test Cases
+    <button class="ui button blue" style="float:right" (click)="isAddingTestCases = true;">Create New</button>
+  </div>
+  <div class="content">
+    <p *ngIf="!selectedQuestion.test_cases">Modal content</p>
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Inputs</th>
+          <th>Points</th>
+          <th>isHidden</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let test_case of questions[selectedIndex].test_cases">
+          <td>{{test_case.inputs}}</td>
+          <td>{{test_case.points}}</td>
+          <td>{{test_case.isHidden}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="actions">
+    <button class="ui red button" (click)="viewTestCases.deny()">Cancel</button>
+  </div>
+</sui-modal>
+
+
+
+
+
+
+
+
+
+
+<sui-modal [isClosable]="false" (dismissed)="isQtsModalAdding = false;" #isQuestionAdding *ngIf="isQtsModalAdding">
+  <div class="header">Add Question</div>
+  <div class="content">
+    <form class="ui form" #f="ngForm" (ngSubmit)="createQuestion(f);">
+      <div class="field">
+        <div class="two fields">
+          <div class="field">
+            <label>Name</label>
+            <input type="text" name="name" ngModel placeholder="Enter name here.">
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea name="description" rows="2" ngModel placeholder="Enter description here.."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="two fields">
+          <div class="field">
+            <div class="ui segment" style="margin-top:10px;">
+              <sui-select placeholder="Difficulty" name="difficulty" ngModel>
+                <sui-select-option value="Hard"></sui-select-option>
+                <sui-select-option value="Intermediate"></sui-select-option>
+                <sui-select-option value="Basic"></sui-select-option>
+              </sui-select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Choose Code File</label>
+            <input type="file" name="file" (change)="getFile($event);" ngModel>
+          </div>
+        </div>
+      </div>
+      <button class="ui button blue" (click)="isQuestionAdding.dismiss()">Cancel</button>
+      <button class="ui button green" type="submit" style="float:right">Submit</button>
+    </form>
+  </div>
+
+</sui-modal>
+
+
+
+
+
+
+
+
+
+
+<sui-modal [isClosable]="false" (dismissed)="isAddingStudent = false;" #addStudentModal *ngIf="isAddingStudent">
+  <div class="header">Add Student</div>
+  <div class="content">
+    <form class="ui form" #f="ngForm" (ngSubmit)="createStudent(f);">
+      <div class="field">
+        <div class="two fields">
+          <div class="field">
+            <label>Name</label>
+            <input type="text" name="name" ngModel placeholder="Enter Name">
+          </div>
+          <div class="field">
+            <label>School</label>
+            <input type="text" name="school" ngModel placeholder="Enter School">
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="two fields">
+          <div class="field">
+            <label>Course</label>
+            <input type="text" name="course" ngModel placeholder="Enter Course">
+          </div>
+          <div class="field">
+            <label>Year</label>
+            <input type="text" name="year" ngModel placeholder="Enter Year">
+          </div>
+        </div>
+      </div>
+      <button type="button" class="ui button blue" (click)="addStudentModal.dismiss();">Cancel</button>
+      <button type="submit" class="ui button green" style="float:right">Submit</button>
+    </form>
+  </div>
+
+</sui-modal>
+
+
+
+<sui-modal [isClosable]="false" (dismissed)="isUpdatingStudent = false;" #updateStudentModal *ngIf="isUpdatingStudent">
+  <div class="header">Update Student</div>
+  <div class="content">
+    <form class="ui form">
+      <div class="field">
+        <div class="two fields">
+          <div class="field">
+            <label>Name</label>
+            <input type="text" name="name" [(ngModel)]="selectedStudent.name" placeholder="Enter Name" #name>
+          </div>
+          <div class="field">
+            <label>School</label>
+            <input type="text" name="school" [(ngModel)]="selectedStudent.school" placeholder="Enter School" #school>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="two fields">
+          <div class="field">
+            <label>Course</label>
+            <input type="text" name="course" [(ngModel)]="selectedStudent.course" placeholder="Enter Course" #course>
+          </div>
+          <div class="field">
+            <label>Year</label>
+            <input type="text" name="year" [(ngModel)]="selectedStudent.year" placeholder="Enter Year" #year>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="ui button blue" (click)="updateStudentModal.dismiss()">Cancel</button>
+      <button type="button" class="ui button green" style="float:right"
+        (click)="updateStudent(name.value, school.value, course.value, year.value, selectedStudent.std_id)">Submit</button>
+    </form>
+  </div>
+
+</sui-modal>

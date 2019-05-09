@@ -1,0 +1,138 @@
+<app-admin-menu></app-admin-menu>
+
+
+<div style="margin-top:5%">
+   <button class="ui button blue" style="float:right;margin-bottom:10px;" (click)="isCreating = true;">
+      Add User
+   </button>
+
+   <table class="ui celled table center aligned">
+      <thead>
+         <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Role</th>
+            <th colspan="2">Action</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr *ngFor="let user of users">
+            <td>{{user.firstname}}</td>
+            <td>{{user.lastname}}</td>
+            <td>{{user.role}}</td>
+            <td>
+               <button class="ui red button" (click)="deleteUser(user.id)">
+                  Delete
+               </button>
+            </td>
+            <td>
+               <button class="ui violet button" (click)="openUpdateModal(user)">
+                  Update
+               </button>
+            </td>
+
+         </tr>
+      </tbody>
+   </table>
+</div>
+
+
+<sui-modal [isClosable]="false" (dismissed)="isCreating = false;" #modalCreateUser *ngIf="isCreating">
+   <div class="header">Create User</div>
+   <div class="content">
+      <form class="ui form" #f="ngForm" (ngSubmit)="createUser(f);">
+         <div class="field">
+            <div class="three fields">
+               <div class="field">
+                  <label>First Name</label>
+                  <input type="text" name="firstname" ngModel placeholder="First Name" required>
+               </div>
+               <div class="field">
+                  <label>Last Name</label>
+                  <input type="text" name="lastname" ngModel placeholder="Last Name" required>
+               </div>
+
+               <div class="field">
+                  <div class="ui segment" style="margin-top:10px;">
+                     <sui-select placeholder="Choose Role" name="role" ngModel required>
+                        <sui-select-option value="admin"></sui-select-option>
+                        <sui-select-option value="moderator"></sui-select-option>
+                     </sui-select>
+                  </div>
+               </div>
+
+            </div>
+         </div>
+
+         <div class="field">
+            <div class="two fields">
+               <div class="field">
+                  <label>Username</label>
+                  <input type="text" name="username" ngModel placeholder="Enter username" required>
+               </div>
+               <div class="field">
+                  <label>Password</label>
+                  <input type="text" name="password" ngModel placeholder="Enter password" required>
+               </div>
+            </div>
+         </div>
+
+
+         <button class="ui button blue" type="button" style="float:left;"
+            (click)="modalCreateUser.dismiss();">Cancel</button>
+         <button class="ui button" type="submit" style="float:right;">Submit</button>
+      </form>
+   </div>
+</sui-modal>
+
+<sui-modal [isClosable]="false" (dismissed)="isUpdating = false;" #modalUpdateUser *ngIf="isUpdating">
+   <div class="header">Update User</div>
+   <div class="content">
+      <div class="ui form">
+         <div class="field">
+            <div class="three fields">
+               <div class="field">
+                  <label>First Name</label>
+                  <input type="text" name="firstname" [(ngModel)]="selectedUser.firstname" placeholder="First Name"
+                     #updateFirstname>
+               </div>
+               <div class="field">
+                  <label>Last Name</label>
+                  <input type="text" name="lastname" [(ngModel)]="selectedUser.lastname" placeholder="Last Name"
+                     #updateLastname>
+               </div>
+
+               <div class="field">
+                  <div class="ui segment" style="margin-top:10px;">
+                     <sui-select placeholder="Choose Role" name="role" [(ngModel)]="selectedUser.role" #updateRole>
+                        <sui-select-option value="admin"></sui-select-option>
+                        <sui-select-option value="moderator"></sui-select-option>
+                     </sui-select>
+                  </div>
+               </div>
+
+            </div>
+         </div>
+
+         <div class="field">
+            <div class="two fields">
+               <div class="field">
+                  <label>Username</label>
+                  <input type="text" name="username" [(ngModel)]="selectedUser.username" placeholder="Enter username"
+                     #updateUsername>
+               </div>
+               <div class="field">
+                  <label>Password</label>
+                  <input type="text" name="password" placeholder="Enter password" #updatePassword>
+               </div>
+            </div>
+         </div>
+
+
+         <button class="ui button blue" type="button" style="float:left;"
+            (click)="modalUpdateUser.dismiss();">Cancel</button>
+         <button class="ui button" type="button" style="float:right;"
+            (click)="updateUser(updateFirstname.value, updateLastname.value, updateRole.value, updateUsername.value, updatePassword.value, selectedUser.id)">Submit</button>
+      </div>
+   </div>
+</sui-modal>
