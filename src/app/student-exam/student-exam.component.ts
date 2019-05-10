@@ -11,6 +11,7 @@ import { QuestionsService } from '../services/questions/questions.service';
 export class StudentExamComponent implements OnInit {
   std_id: any;
   questions: any;
+  selectedQuestionIndex = 0;
   constructor(
     private route: ActivatedRoute,
     private stdQtsCasesService: StdQtsCasesService,
@@ -35,6 +36,13 @@ export class StudentExamComponent implements OnInit {
       .subscribe((response) => {
         console.log(response);
       }, err => console.log(err));
+  }
+
+  submit(question) {
+    this.stdQtsCasesService.submitCode(question, this.std_id)
+      .subscribe((response) => {
+        console.log(response);
+      }, err => console.error(err));
   }
 
 

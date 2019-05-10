@@ -28,4 +28,8 @@ export class StdQtsCasesService {
   getStudentQuestionWithCases(std_id) {
     return this.http.get(configs.ip + "/std-qts-cases/" + std_id);
   }
+
+  submitCode(question, std_id) {
+    return this.http.patch(configs.ip + "/student-exam/submit/" + std_id, question);
+  }
 }
