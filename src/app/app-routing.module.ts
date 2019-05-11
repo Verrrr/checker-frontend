@@ -6,6 +6,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { AdminExamsComponent } from './admin-exams/admin-exams.component';
 import { AdminExamComponent } from './admin-exam/admin-exam.component';
 import { StudentExamComponent } from './student-exam/student-exam.component';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
       {
         path: 'exam/:exam_id',
         component: AdminExamComponent
+      },
+      {
+        path: 'leaderboard/:exam_id',
+        component: LeaderboardComponent
       }
     ]
   },

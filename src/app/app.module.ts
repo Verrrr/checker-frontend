@@ -16,6 +16,7 @@ import { StudentExamComponent } from './student-exam/student-exam.component';
 
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import 'codemirror/mode/javascript/javascript';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 
 
 
@@ -29,6 +30,7 @@ import 'codemirror/mode/javascript/javascript';
     AdminExamsComponent,
     AdminExamComponent,
     StudentExamComponent,
+    LeaderboardComponent,
   ],
   imports: [
     BrowserModule,

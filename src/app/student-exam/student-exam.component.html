@@ -1,22 +1,27 @@
 <div class="ui segment">
   <div class="ui grid" *ngFor="let question of questions;let i = index;">
-    <div class="four wide column">
-      <div class="ui card" style="width:100%">
-        <div class="content">
-          <div class="header">{{question.name}}</div>
-        </div>
+    <div class="four wide column" *ngIf="question">
+      <div class="ui segment raised">
 
-        <div class="content">
-          <p>Difficulty: {{question.difficulty}}</p>
-          <p>Description: {{question.description}}</p>
-        </div>
+        <a class="ui ribbon label"
+          [ngClass]="{'red': !question.isCompleted, 'green': question.isCompleted}">{{question.isCompleted ? 'Completed': 'Not Completed'}}</a>
+        <div class="ui card" style="width:100%">
+          <div class="content">
+            <div class="header">{{question.name}}</div>
+          </div>
 
-        <div class="extra content">
-          <button class="ui button blue" (click)="question.isEditorOpen = !question.isEditorOpen">Toggle Text
-            Editor</button>
-          <button class="ui button blue">View Test Cases</button>
-        </div>
+          <div class="content">
+            <p>Difficulty: {{question.difficulty}}</p>
+            <p>Description: {{question.description}}</p>
+          </div>
 
+          <div class="extra content">
+            <button class="ui button blue" (click)="question.isEditorOpen = !question.isEditorOpen">Toggle Text
+              Editor</button>
+            <button class="ui button blue" (click)="viewTestCases(question.qts_id)">View Test Cases</button>
+          </div>
+
+        </div>
       </div>
     </div>
 
@@ -36,3 +41,29 @@
     </div>
   </div>
 </div>
+
+
+
+<sui-modal [isClosable]="true" (dismissed)="isViewingTestCases = false;" #testCaseModal *ngIf="isViewingTestCases">
+  <div class="header">Test Cases</div>
+  <div class="content">
+    <div class="ui list">
+
+      <div class="item" *ngFor="let test_cases of currentTestCases">
+        <i class="icon" [ngClass]="{'check': test_cases.isCorrect, 'close': !test_cases.isCorrect}"></i>
+        <div class="content">
+          <a class="header">Inputs : {{test_cases.inputs}}</a>
+          <div class="description">
+            Point(s): {{test_cases.points}} <br>
+            Hidden: {{test_cases.isHidden ? 'True' : 'False'}} <br>
+            <span *ngIf="!!test_cases.err_msg">Error Message: {{test_cases.err_msg}}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="actions">
+    <button class="ui red button" (click)="isViewingTestCases.dismiss()">Cancel</button>
+  </div>
+</sui-modal>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body>
+  <div class="loader initial" *ngIf="isLoading">
+    <div class="spinner">
+      <div class="spinner-circle"></div>
+      <div class="spinner-circle"></div>
+    </div>
+  </div>
+  <div class='scroller'>
+    <div id='app'>
+      <div class='leaderboard'>
+        <h1>Leaderboard</h1>
+        <ol>
+          <li *ngFor="let user of leaderboard">
+            <img src="https://cdn4.iconfinder.com/data/icons/user-avatar-flat-icons/512/User_Avatar-04-512.png" alt=""
+              srcset="">
+            <mark>{{user.name}}</mark>
+            <small>{{user.total == null ? '0': user.total}}</small>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+</body>
+
+</html>

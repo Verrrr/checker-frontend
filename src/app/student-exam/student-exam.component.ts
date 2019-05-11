@@ -12,6 +12,9 @@ export class StudentExamComponent implements OnInit {
   std_id: any;
   questions: any;
   selectedQuestionIndex = 0;
+  isViewingTestCases = false;
+  currentTestCases: any;
+  currentQuestion: any;
   constructor(
     private route: ActivatedRoute,
     private stdQtsCasesService: StdQtsCasesService,
@@ -25,7 +28,7 @@ export class StudentExamComponent implements OnInit {
 
   }
   getStdQtsCases(std_id) {
-    this.stdQtsCasesService.getStudentQuestionWithCases(std_id)
+    this.stdQtsCasesService.getStudentQuestions(std_id)
       .subscribe((questions) => {
         this.questions = questions;
       }, err => console.log(err));
@@ -38,10 +41,20 @@ export class StudentExamComponent implements OnInit {
       }, err => console.log(err));
   }
 
+  viewTestCases(qst_id) {
+    this.stdQtsCasesService.getStudentTestCases(this.std_id, qst_id)
+      .subscribe((test_cases) => {
+
+        this.currentTestCases = test_cases;
+        this.isViewingTestCases = true;
+      }, (err) => console.error(err));
+  }
+
   submit(question) {
     this.stdQtsCasesService.submitCode(question, this.std_id)
       .subscribe((response) => {
-        console.log(response);
+        this.getStdQtsCases(this.std_id);
+        this.viewTestCases(question.qts_id);
       }, err => console.error(err));
   }
 

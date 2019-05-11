@@ -29,6 +29,14 @@ export class StdQtsCasesService {
     return this.http.get(configs.ip + "/std-qts-cases/" + std_id);
   }
 
+  getStudentQuestions(std_id) {
+    return this.http.get(configs.ip + "/student-questions/" + std_id);
+  }
+
+  getStudentTestCases(std_id, qts_id) {
+    return this.http.get(configs.ip + "/student-test-cases/" + std_id + "/" + qts_id);
+  }
+
   submitCode(question, std_id) {
     return this.http.patch(configs.ip + "/student-exam/submit/" + std_id, question);
   }

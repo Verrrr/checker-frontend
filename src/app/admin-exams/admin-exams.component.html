@@ -22,6 +22,8 @@
             <td>{{exam.time_from}}</td>
             <td>{{exam.time_to}}</td>
             <td><button class="ui button green" routerLink="/admin/exam/{{exam.exam_id}}">View</button></td>
+            <td><button class="ui button green" routerLink="/admin/leaderboard/{{exam.exam_id}}">Leaderboard</button>
+            </td>
             <td><button class="ui button red" (click)="deleteExam(exam.exam_id)">Delete</button></td>
             <td><button class="ui button violet" (click)="showUpdateModal(exam);">Update</button></td>
          </tr>
