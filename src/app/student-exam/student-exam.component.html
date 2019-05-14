@@ -1,69 +1,77 @@
-<div class="ui segment">
-  <div class="ui grid" *ngFor="let question of questions;let i = index;">
-    <div class="four wide column" *ngIf="question">
-      <div class="ui segment raised">
+<body>
+  <div class="ui segment">
+    <div class="ui grid" style="height:100vh;">
+      <div class="four wide column" *ngIf="questions" style="overflow-y:auto;max-height: 90vh;">
+        <div class="ui segment raised" *ngFor="let question of questions;let i = index;">
 
-        <a class="ui ribbon label"
-          [ngClass]="{'red': !question.isCompleted, 'green': question.isCompleted}">{{question.isCompleted ? 'Completed': 'Not Completed'}}</a>
-        <div class="ui card" style="width:100%">
-          <div class="content">
-            <div class="header">{{question.name}}</div>
-          </div>
+          <a class="ui ribbon label"
+            [ngClass]="{'red': !question.isCompleted, 'green': question.isCompleted}">{{question.isCompleted ? 'Completed': 'Not Completed'}}</a>
+          <div class="ui card" style="width:100%">
+            <div class="content">
+              <div class="header">{{question.name}}</div>
+            </div>
 
-          <div class="content">
-            <p>Difficulty: {{question.difficulty}}</p>
-            <p>Description: {{question.description}}</p>
-          </div>
+            <div class="content">
+              <p>Difficulty: {{question.difficulty}}</p>
+              <p>Description: {{question.description}}</p>
+            </div>
 
-          <div class="extra content">
-            <button class="ui button blue" (click)="question.isEditorOpen = !question.isEditorOpen">Toggle Text
-              Editor</button>
-            <button class="ui button blue" (click)="viewTestCases(question.qts_id)">View Test Cases</button>
-          </div>
+            <div class="extra content">
+              <button class="ui button blue" (click)="currentQuestion = question;">Work on this question</button>
+              <button class="ui button blue" (click)="viewTestCases(question.qts_id)">View Test Cases</button>
+            </div>
 
-        </div>
-      </div>
-    </div>
-
-
-
-    <div class="twelve wide column" *ngIf="!!question.isEditorOpen">
-      <ngx-codemirror [(ngModel)]="question.code" [options]="{
-    lineNumbers: true,
-    theme: 'material',
-    mode: 'javascript',
-    matchBrackets: true,
-    lineNumbers: true,
-    direction:'ltr'
-  }"></ngx-codemirror>
-      <button class="ui blue button" (click)="save(question)">SAVE</button>
-      <button class="ui green button" style="float:right" (click)="submit(question);">SUBMIT</button>
-    </div>
-  </div>
-</div>
-
-
-
-<sui-modal [isClosable]="true" (dismissed)="isViewingTestCases = false;" #testCaseModal *ngIf="isViewingTestCases">
-  <div class="header">Test Cases</div>
-  <div class="content">
-    <div class="ui list">
-
-      <div class="item" *ngFor="let test_cases of currentTestCases">
-        <i class="icon" [ngClass]="{'check': test_cases.isCorrect, 'close': !test_cases.isCorrect}"></i>
-        <div class="content">
-          <a class="header">Inputs : {{test_cases.inputs}}</a>
-          <div class="description">
-            Point(s): {{test_cases.points}} <br>
-            Hidden: {{test_cases.isHidden ? 'True' : 'False'}} <br>
-            <span *ngIf="!!test_cases.err_msg">Error Message: {{test_cases.err_msg}}</span>
           </div>
         </div>
       </div>
 
+
+
+      <div class="twelve wide column" *ngIf="currentQuestion">
+        <h2 class="ui header">
+          <div class="content">
+            {{currentQuestion.name}}
+            <div class="sub header">You are currently working on the question specify above</div>
+          </div>
+        </h2>
+        <ngx-codemirror [(ngModel)]="currentQuestion.code" [options]="{
+        lineNumbers: true,
+        theme: 'material',
+        mode: 'javascript',
+        matchBrackets: true,
+        lineNumbers: true,
+        direction:'ltr'
+      }"></ngx-codemirror>
+        <br>
+        <button class="ui blue button" (click)="save(currentQuestion)">SAVE</button>
+        <button class="ui green button" style="float:right" (click)="submit(currentQuestion);">SUBMIT</button>
+      </div>
     </div>
   </div>
-  <div class="actions">
-    <button class="ui red button" (click)="isViewingTestCases.dismiss()">Cancel</button>
-  </div>
-</sui-modal>
+
+
+
+  <sui-modal [isClosable]="true" (dismissed)="isViewingTestCases = false;" #testCaseModal *ngIf="isViewingTestCases">
+    <div class="header">Test Cases</div>
+    <div class="content">
+      <div class="ui list">
+
+        <div class="item" *ngFor="let test_cases of currentTestCases">
+          <i class="icon" [ngClass]="{'check': test_cases.isCorrect, 'close': !test_cases.isCorrect}"></i>
+          <div class="content">
+            <a class="header">Inputs : {{test_cases.inputs}}</a>
+            <div class="description">
+              Point(s): {{test_cases.points}} <br>
+              Hidden: {{test_cases.isHidden ? 'True' : 'False'}} <br>
+              <span *ngIf="!!test_cases.err_msg">Error Message: {{test_cases.err_msg}}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="actions">
+      <button class="ui red button" (click)="isViewingTestCases.dismiss()">Cancel</button>
+    </div>
+  </sui-modal>
+</body>

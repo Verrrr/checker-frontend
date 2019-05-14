@@ -31,7 +31,12 @@ export class StudentExamComponent implements OnInit {
     this.stdQtsCasesService.getStudentQuestions(std_id)
       .subscribe((questions) => {
         this.questions = questions;
+        console.log(this.questions)
+        this.currentQuestion = this.questions[0];
       }, err => console.log(err));
+  }
+  try() {
+    this.questions.push(this.questions[0]);
   }
 
   save(question) {
